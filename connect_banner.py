@@ -6,12 +6,18 @@ import argparse
 parser = argparse.ArgumentParser(description="A script that connects to a port and prints the banner")
 parser.add_argument("target", help="Target IP or hostname")
 parser.add_argument("port", type=int, help="Target Port")
+parser.add_argument("--wordlist", required=True, help="Path to wordlist")
 args = parser.parse_args()
 
-def send_command(s):
-    s.sendall(b"VRFY root\r\n")
-    resp = s.recv(1024).decode(error="ignore")
-    print("[+] Response:", resp.strip())
+
+def check_user(s, wordlist):
+    with open(wordlist) as f:
+        for user in f:
+            user = user.strip()
+            s.sendall(f"VRFY {user}\r\n".encode())
+            resp = s.recv(1024).decode(errors="ignore")
+            print(f"[>] {user}: {resp.strip()}")
+
 
 def main():
     s = socket.socket()
@@ -22,7 +28,7 @@ def main():
     print("[+] Banner:", banner.strip())
 
     if args.port == 25:
-        send_command(s)
+        check_user(s, args.wordlist)
 
     s.close()
 
