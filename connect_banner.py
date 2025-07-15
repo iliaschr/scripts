@@ -11,6 +11,7 @@ args = parser.parse_args()
 
 
 def check_user(s, wordlist):
+    print("[*] Starting user enumeration using VRFY...")
     with open(wordlist) as f:
         for user in f:
             user = user.strip()
