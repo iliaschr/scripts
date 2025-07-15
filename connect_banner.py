@@ -1,3 +1,6 @@
+# TODO: Reconnect when connection drops, since some smtp servers disconnect after a few failed queries
+# TODO: Make this a multithreaded scanner (Maybe.)
+
 import socket
 import argparse
 
